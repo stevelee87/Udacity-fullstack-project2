@@ -12,11 +12,17 @@ Modern web applications perform a variety of functions and provide amazing featu
 ### What Will I Learn?
 You will learn how to develop a RESTful web application using the Python framework Flask along with implementing third-party OAuth authentication. You will then learn when to properly use the various HTTP methods available to you and how these methods relate to CRUD (create, read, update and delete) operations.
 
-## 2 How to run
+## 2 Architecture
+
+The main file `application.py` contains the core Flask code, i.e. the app.route decorators. All the CRUD operations are at DAO.py. DAO (_Data Access Object_) file contains 3 classes: DAOUser, DAOCategory and DAOItem, whose methods are called in the `application.py` to get the related CRUD operations done.
+The `database_setup.py` file contains the necessary classes to setup a SQLAlchemy database, database tables and their relationships.
+The `db_init.py` is just a file to create some first items to populate the database.
+
+## 3 How to run
 
 **Important:** I am using `Python 3.6.8`. Before proceeding, make sure you have a compatible version.
 
-1. Install the necessary Python modules below (I recommend you to create a virtual environment and install all the modules there. I used _Pipenv_):
+1. Install the necessary Python modules below (I recommend you to create a virtual environment and install all the modules there. I am using _Pipenv_):
  * `Flask 1.0.2`
  * `Flask-SQLAlchemy 2.3.1`
  * `SQLAlchemy 1.3.1`
@@ -30,7 +36,7 @@ You will learn how to develop a RESTful web application using the Python framewo
 
 hint: After a while playing around, you will have added, edited and deleted some new items. If you want to start using the original database, just delete the file `catalog.db` and run again `python3 db_init.py`.
 
-## 3 Application ***Geek Coffee catalog*** 
+## 4 Application ***Geek Coffee catalog*** 
 
 * Use the GEEK COFFEE logo at top left corner to go to the main page.
 * See the latest 10 items added to the catalog on the page center at the main page.
