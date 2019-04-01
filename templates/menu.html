@@ -1,0 +1,9 @@
+<div class='menu'>
+    <h1>Category</h1>
+    <ul class='nav'>
+        {% for category in categories  %}
+            <li><a href="{{url_for('show_items', category_name = category.name)}}">{{category.name}}
+            </a></li>
+        {% endfor %}  
+    </ul>
+</div>

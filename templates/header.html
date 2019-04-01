@@ -1,0 +1,8 @@
+<header>
+    <a href="{{url_for('home')}}" class='logo'>Geek Coffee</a>
+    {% if is_logged == True %}
+        <a class='login' href="{{url_for('gdisconnect')}}"> {{ login_session.username }} - Logout</a>
+    {% else %} 
+        <a class='login' href="{{url_for('auth_login')}}"> Login</a>
+    {% endif %}
+</header>

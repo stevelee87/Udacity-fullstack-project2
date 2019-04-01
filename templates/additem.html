@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+{% include 'head.html' %}
+<body>
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class='main'>
+    <h1>Add new item</h1>
+    {% if category_name != None %}
+    <form action="{{url_for('add_item_to_specific_category', category_name = category_name)}}" method="POST">
+    {% else %}
+    <form action="{{url_for('add_item')}}" method="POST">
+    {% endif %}
+        <div class="group">
+            <input type="text" name="new_title" required="required">
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>New Title</label>
+        </div>
+        <div class="group">
+            <textarea name="new_description" required="required"></textarea>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>New Description</label>
+        </div>
+        Category:
+        <select name="new_category">
+            {% for category in categories%}
+                {% if category_name == category.name %}
+                    <option value="{{ category.id }}" selected>{{ category.name }}</option>
+                {% else %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endif %}
+        {% endfor %}
+        </select>
+        <div class="btn-box">
+            <input class="input-btn" type="submit" value="Add new">
+            <a  class="input-btn" href = "{{url_for('home')}}">Cancel</a>
+        </div>
+    </form>
+</div>   
+</body>
+</html>

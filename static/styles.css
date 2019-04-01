@@ -1,0 +1,416 @@
+/* ----------- GENERAL ----------- */
+* {
+    margin: 0px;
+    Max-width: 1420px;
+}
+
+.std-link{
+    text-decoration: none;
+    color: #a66;
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 200;
+    animation-name: FadeIn;
+    animation-duration: 0.8s;
+    opacity: 1;
+}
+
+.std-link:hover{
+    animation-name: FadeOut;
+    animation-duration: 0.8s;
+    opacity: 0.4; 
+}
+
+/* ----------- HEADER SECTION ----------- */
+
+header {
+    float: absolute;
+    background-color: rgba(200, 200, 200, 1);
+    width: absolute;
+    height: 55px;
+}
+
+.logo {
+    float: left;
+    font-family: 'Catamaran', sans-serif;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 32px;
+    color: #333;
+    margin-left: 10px;
+    margin-top: 3px;
+    animation-name: FadeIn;
+    animation-duration: 0.8s;
+    opacity: 1;
+}
+
+.logo:hover{
+    animation-name: FadeOut;
+    animation-duration: 0.8s;
+    opacity: 0.4; 
+}
+
+.login {
+    float: right;
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 400;
+    text-decoration: none;
+    color: #333;
+    margin-right: 20px;
+    margin-top: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #333;
+    border-radius: 8px;
+    padding: 2px 13px;
+    animation-name: FadeIn;
+    animation-duration: 0.8s;
+    opacity: 1;
+}
+
+.login:hover{
+    animation-name: FadeOut;
+    animation-duration: 0.8s;
+    opacity: 0.4; 
+}
+
+/* ----------- BODY SECTION ----------- */
+
+body { 
+    background-color: #333333; 
+    background-image: url("proj2backimg.jpg");
+    background-size: cover;
+    background-position: top center;
+    background-repeat: no-repeat;
+    /*Max-width: 1920px;*/
+    background-position: 0% 0%;
+    position: center;
+}
+
+h1 {
+    color: #333;
+    font-family: 'Catamaran', sans-serif;
+    font-size: 24px;
+    font-weight: 700; 
+}
+
+/* ----------- LEFT MENU ----------- */
+
+.menu {
+    float: left;
+    background-color: rgba(200,200,200,0.9);
+    border-radius: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+    width: 23%;
+    max-width: 200px;
+    min-width: 135px;
+    padding-left: 10px;
+    padding-top: 10px;
+
+}
+
+.nav{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left:0px;
+    list-style: none;
+}
+
+.nav li a{
+    text-decoration: none;
+    color: #333;
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 400;
+    animation-name: FadeIn;
+    animation-duration: 0.8s;
+    opacity: 1;
+}
+
+.nav li a:hover{
+    animation-name: FadeOut;
+    animation-duration: 0.8s;
+    opacity: 0.4; 
+}
+
+/* ----------- MAIN (center of page) ----------- */
+
+/*Home page*/
+.main{
+    float: left;
+    background-color: rgba(200,200,200,0.9);
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-right: 1%;
+    margin-left: 10px;
+    min-width: 60%;
+    max-width: 60%;
+    padding-left: 10px;
+    padding-top: 10px;
+    min-height: 100px;
+
+}
+
+.latest-items{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left:0px;
+    list-style: none;
+}
+
+.latest-item{
+    text-decoration: none;
+    color: #333;
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 400;
+    animation-name: FadeIn;
+    animation-duration: 0.8s;
+    opacity: 1;
+}
+
+.latest-item:hover{
+    animation-name: FadeOut;
+    animation-duration: 0.8s;
+    opacity: 0.4; 
+}
+
+.latest-category{
+    text-decoration: none;
+    color: #666;
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 200;
+    animation-name: FadeIn;
+    animation-duration: 0.8s;
+    opacity: 1;
+}
+
+.latest-category:hover{
+    animation-name: FadeOut;
+    animation-duration: 0.8s;
+    opacity: 0.4; 
+}
+
+.current-category{
+    text-decoration: none;
+    color: #666;
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 700;
+    animation-name: FadeIn;
+    animation-duration: 0.8s;
+    opacity: 1;
+}
+
+.current-category:hover{
+    animation-name: FadeOut;
+    animation-duration: 0.8s;
+    opacity: 0.4; 
+}
+
+.main p, .main ul li{
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 400;
+    color: #333;
+}
+
+/*CRUD forms*/
+
+.group {
+    position: relative;
+    margin: 20px 0;
+  }  
+
+form{
+    text-decoration: none;
+    color: #333;
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 400;
+    width: 320px;
+    margin: 45px auto;
+
+}
+
+*,
+:before,
+:after {
+  box-sizing: border-box;
+}
+  
+textarea {
+    resize: none;
+}
+  
+input,
+textarea {
+    background: none;
+    color: #333;
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 200;
+    font-size: 14px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 280px;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #999;
+}
+input:focus,
+textarea:focus,
+select {
+    outline: none;
+}
+input:focus ~ label, input:valid ~ label,
+textarea:focus ~ label,
+textarea:valid ~ label {
+    top: -14px;
+    font-size: 12px;
+    color: #333;
+}
+
+input:focus ~ .bar:before,
+textarea:focus ~ .bar:before {
+    width: 280px;
+}
+label {
+    color: #666;
+    font-size: 16px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 300ms ease all;
+}
+  
+.bar {
+    position: relative;
+    display: block;
+    width: 280px;
+}
+.bar:before {
+    content: '';
+    height: 1px;
+    width: 0;
+    bottom: 0px;
+    position: absolute;
+    background: #333;
+    transition: 300ms ease all;
+    left: 0%;
+}
+
+select{
+    background: none;
+    color: #333;
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 200;
+    font-size: 14px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 200px;
+    border: none;
+    border-radius: 0;
+}
+
+.btn-box {
+    text-align: center;
+    margin: 50px 0;
+}
+
+.input-btn{
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: 16px;
+    background: none;
+    color: #333;
+    border-style: none;
+    border-bottom: 1px solid #333;
+    float: left;
+    width: 80px;
+    padding: 10px 10px 10px 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    animation-name: FadeIn;
+    animation-duration: 0.8s;
+    opacity: 1;
+    cursor: pointer;
+}
+
+.input-btn:hover{
+    animation-name: FadeOut;
+    animation-duration: 0.8s;
+    opacity: 0.4; 
+}
+
+.div-edit-delete{
+
+    text-align: right;
+    margin-right: 10px;
+    margin-bottom: 0px;
+    
+}
+
+/* Login Page */
+.main-loggin{
+    background-color: rgba(200,200,200,0.9);
+    border-radius: 10px;
+    margin-top: 50px;
+    margin-left: 20%;
+    min-width: 60%;
+    max-width: 60%;
+    padding-left: 10px;
+    padding-top: 10px;
+    min-height: 300px;
+}
+
+.main-loggin p{
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 400;
+    color: #333;
+}
+
+.google-btn{
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 90px;
+    border: solid;
+    border-width: 1px;
+    border-color: #ccc;
+    background-color: #933;
+    border-radius: 10px;
+    padding: 40px 20px;
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 700;
+    color: #ccc;
+}
+
+/* ----------- FLASH MESSAGES ----------- */
+
+.flash-messages {
+    background: #333333;
+}
+
+.flash-messages ul li {
+    color: #cccccc;
+    list-style: none;
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 400;
+}
+
+/* ----------- ANIMATIONS ----------- */
+@keyframes FadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.4; 
+    }
+  }
+
+  @keyframes FadeIn {
+    0% {
+      opacity: 0.4;
+    }
+    100% {
+      opacity: 1; 
+    }
+  }

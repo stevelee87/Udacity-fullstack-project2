@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+{% include 'head.html' %}
+<body>
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class='main'>
+    <h1>Are you sure you want to delete the following item?</h1>
+    <ul class='latest-items'>
+        <li><strong>Item:</strong> {{ item.title }}</li>
+        <li><strong>Description:</strong> {{ item.description }}</li>
+        <li><strong>Category:</strong> {{ category_name }}</li>
+    </ul>
+    <br>
+    <form action="{{url_for('delete_item', item_title = item.title)}}" method="POST">
+        <div class="btn-box">
+            <input class="input-btn" type="submit" value="Delete">
+            <a class="input-btn" href="{{url_for('show_item_description', item_title = item.title, category_name = category_name)}}">
+            Cancel</a> 
+        </div>
+    </form>
+</div>   
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+{% include 'head.html' %}
+<body>
+{% include 'header.html' %}
+{% include 'flashmessages.html' %}
+{% include 'menu.html' %}
+
+<div class='main'>
+  {% if is_logged == True %}
+    <a class="std-link" href="{{url_for('add_item')}}"> Add new item </a>
+  {% endif %}
+  <h1>Latest items</h1>
+  <ul class='latest-items'>
+  {% for item in latest_items %}
+    <li>
+      <a href="{{url_for('show_item_description', category_name = item[1].name, item_title = item[0].title)}}" 
+      class='latest-item'>
+      {{ item[0].title }}</a>
+      <a href="{{url_for('show_items', category_name = item[1].name)}}" class='latest-category'> 
+      ({{ item[1].name }})</a>
+    </li>
+  {% endfor %}
+</div>   
+</body>
+</html>
