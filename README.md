@@ -14,7 +14,7 @@ You will learn how to develop a RESTful web application using the Python framewo
 
 ## 2 Architecture
 
-The main file `application.py` contains the core Flask code, i.e. the app.route decorators. All the CRUD operations are at DAO.py. DAO (_Data Access Object_) file contains 3 classes: DAOUser, DAOCategory and DAOItem, whose methods are called in the `application.py` to get the related CRUD operations done.
+The main file `application.py` contains the core Flask code, i.e. the app.route decorators. All the CRUD operations are at `DAO.py`. DAO (_Data Access Object_) file contains 3 classes: DAOUser, DAOCategory and DAOItem, whose methods are called in the `application.py` to get the related CRUD operations done.
 The `database_setup.py` file contains the necessary classes to setup a SQLAlchemy database, database tables and their relationships.
 The `db_init.py` is just a file to create some first items to populate the database.
 
