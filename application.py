@@ -14,31 +14,34 @@ dao_item = DAO.DAOItem()
 dao_user = DAO.DAOUser()
 dao_category = DAO.DAOCategory()
 
-CLIENT_ID = json.loads(open('client_secret.json', 'r').read())['web']['client_id']
+CLIENT_ID = json.loads(
+    open('client_secret.json', 'r').read())['web']['client_id']
 
 
 @app.route('/')
 def home():
     categories = dao_category.get_all_categories()
     latest_items = dao_item.get_latest_items(10)
-    return render_template('home.html', 
-                            categories = categories,
-                            latest_items = latest_items, 
-                            login_session = login_session,
-                            is_logged = dao_user.is_logged(login_session))
+    return render_template('home.html',
+                           categories=categories,
+                           latest_items=latest_items,
+                           login_session=login_session,
+                           is_logged=dao_user.is_logged(login_session))
+
 
 @app.route('/catalog/<string:category_name>/items')
 def show_items(category_name):
     categories = dao_category.get_all_categories()
     category_items = dao_category.get_category_items(category_name)
     items_quantity = len(category_items)
-    return render_template('showitem.html', 
-                            categories = categories, 
-                            category_name = category_name,
-                            category_items = category_items,
-                            items_quantity = items_quantity,
-                            login_session = login_session,
-                            is_logged = dao_user.is_logged(login_session))
+    return render_template('showitem.html',
+                           categories=categories,
+                           category_name=category_name,
+                           category_items=category_items,
+                           items_quantity=items_quantity,
+                           login_session=login_session,
+                           is_logged=dao_user.is_logged(login_session))
+
 
 @app.route('/catalog/<string:category_name>/<string:item_title>')
 def show_item_description(category_name, item_title):
@@ -46,20 +49,21 @@ def show_item_description(category_name, item_title):
     item = dao_item.get_item_by_title(item_title)
     description = item.description
     authorized = get_authorization(item_title, login_session)
-    return render_template('showdescription.html', 
-                            categories = categories, 
-                            category_name = category_name,
-                            item_title = item_title, 
-                            description = description,
-                            login_session = login_session,
-                            is_logged = dao_user.is_logged(login_session),
-                            authorized = authorized)
+    return render_template('showdescription.html',
+                           categories=categories,
+                           category_name=category_name,
+                           item_title=item_title,
+                           description=description,
+                           login_session=login_session,
+                           is_logged=dao_user.is_logged(login_session),
+                           authorized=authorized)
 
-@app.route('/catalog/<string:item_title>/edit', methods=['GET','POST'])
+
+@app.route('/catalog/<string:item_title>/edit', methods=['GET', 'POST'])
 def edit_item(item_title):
-    if dao_user.is_logged(login_session) == False:
+    if dao_user.is_logged(login_session) is False:
         return alert()
-    
+
     if request.method == 'POST':
         new_title = request.form['new_title']
         dao_item.update(item_title,
@@ -68,86 +72,91 @@ def edit_item(item_title):
                         request.form['new_category'])
         category = dao_category.get_category_of_item(new_title)
         return redirect(url_for('show_item_description',
-                         category_name = category.name, 
-                         item_title = new_title))
+                                category_name=category.name,
+                                item_title=new_title))
     else:
         item_to_be_edited = dao_item.get_item_by_title(item_title)
         categories = dao_category.get_all_categories()
         category = dao_category.get_category_of_item(item_title)
-        return render_template('edititem.html', 
-                                item = item_to_be_edited, 
-                                category_name = category.name,
-                                categories = categories,
-                                login_session = login_session,
-                                is_logged = dao_user.is_logged(login_session))
+        return render_template('edititem.html',
+                               item=item_to_be_edited,
+                               category_name=category.name,
+                               categories=categories,
+                               login_session=login_session,
+                               is_logged=dao_user.is_logged(login_session))
 
-@app.route('/catalog/<string:item_title>/delete', methods=['GET','POST'])
+
+@app.route('/catalog/<string:item_title>/delete', methods=['GET', 'POST'])
 def delete_item(item_title):
-    if dao_user.is_logged(login_session) == False:
-        return alert()    
-    
+    if dao_user.is_logged(login_session) is False:
+        return alert()
+
     item_to_be_deleted = dao_item.get_item_by_title(item_title)
     category = dao_category.get_category_of_item(item_title)
     if request.method == 'POST':
         dao_item.delete(item_to_be_deleted)
-        return redirect(url_for('show_items', category_name = category.name))
+        return redirect(url_for('show_items', category_name=category.name))
     else:
         categories = dao_category.get_all_categories()
-        return render_template('deleteitem.html', 
-                                item = item_to_be_deleted, 
-                                category_name = category.name,
-                                categories = categories,
-                                login_session = login_session,
-                                is_logged = dao_user.is_logged(login_session))
+        return render_template('deleteitem.html',
+                               item=item_to_be_deleted,
+                               category_name=category.name,
+                               categories=categories,
+                               login_session=login_session,
+                               is_logged=dao_user.is_logged(login_session))
 
-@app.route('/catalog/additem', methods=['GET','POST'])
+
+@app.route('/catalog/additem', methods=['GET', 'POST'])
 def add_item():
-    if dao_user.is_logged(login_session) == False:
+    if dao_user.is_logged(login_session) is False:
         return alert()
 
     if request.method == 'POST':
         dao_item.create(request.form['new_title'],
-                    request.form['new_description'],
-                    request.form['new_category'],
-                    dao_user.get_user_id(login_session['email']))
+                        request.form['new_description'],
+                        request.form['new_category'],
+                        dao_user.get_user_id(login_session['email']))
         return redirect(url_for('home'))
     else:
         category_name = None
         categories = dao_category.get_all_categories()
-        return render_template('additem.html', 
-                                categories = categories, 
-                                category_name = category_name,
-                                login_session = login_session,
-                                is_logged = dao_user.is_logged(login_session))
+        return render_template('additem.html',
+                               categories=categories,
+                               category_name=category_name,
+                               login_session=login_session,
+                               is_logged=dao_user.is_logged(login_session))
 
-@app.route('/catalog/<string:category_name>/additem', methods=['GET','POST'])
+
+@app.route('/catalog/<string:category_name>/additem', methods=['GET', 'POST'])
 def add_item_to_specific_category(category_name):
-    if dao_user.is_logged(login_session) == False:
+    if dao_user.is_logged(login_session) is False:
         return alert()
-    
+
     if request.method == 'POST':
         dao_item.create(request.form['new_title'],
-                    request.form['new_description'],
-                    request.form['new_category'],
-                    dao_user.get_user_id(login_session['email']))
-        return redirect(url_for('show_items', category_name = category_name))
+                        request.form['new_description'],
+                        request.form['new_category'],
+                        dao_user.get_user_id(login_session['email']))
+        return redirect(url_for('show_items', category_name=category_name))
     else:
         categories = dao_category.get_all_categories()
-        return render_template('additem.html', 
-                                categories = categories, 
-                                category_name = category_name,
-                                login_session = login_session,
-                                is_logged = dao_user.is_logged(login_session))
+        return render_template('additem.html',
+                               categories=categories,
+                               category_name=category_name,
+                               login_session=login_session,
+                               is_logged=dao_user.is_logged(login_session))
 
-@app.route('/login', methods=['GET','POST'])
+
+@app.route('/login', methods=['GET', 'POST'])
 def auth_login():
-    state = ''.join(random.choice(string.ascii_uppercase \
-    + string.digits) for x in range(32))
+    state = ''.join(random.choice(string.ascii_uppercase +
+                    string.digits) for x in range(32))
     login_session['state'] = state
     if request.method == 'POST':
         pass
     else:
-        return render_template('login.html', STATE = state)
+        return render_template('login.html', STATE=state)
+
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
@@ -172,8 +181,8 @@ def gconnect():
 
     # Check that the access token is valid.
     access_token = credentials.access_token
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}'\
-            .format(access_token))
+    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}'
+           .format(access_token))
     http_obj = httplib2.Http()
     result = json.loads(http_obj.request(url, 'GET')[1])
     # If there was an error in the access token info, abort.
@@ -201,8 +210,8 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(json.dumps(
+            'Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -221,11 +230,11 @@ def gconnect():
     login_session['email'] = data['email']
 
     # Create or authenticate user
-    if dao_user.get_user_id(login_session['email']) == None:
+    if dao_user.get_user_id(login_session['email']) is None:
         user_id = dao_user.create(login_session)
     else:
         user_id = dao_user.get_user_id(login_session['email'])
-	
+
     login_session['user_id'] = user_id
 
     output = ''
@@ -236,24 +245,25 @@ def gconnect():
     print("done!")
     return output
 
+
 @app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session.get('access_token')
     if access_token is None:
         print('Access Token is None')
-        response = make_response(json.dumps('Current user not connected.'), 401)
+        response = make_response(json.dumps(
+            'Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
     print('In gdisconnect access token is {}'.format(access_token))
     print('User name is: ')
     print(login_session['username'])
     url = 'https://accounts.google.com/o/oauth2/revoke?token={}'\
-            .format(login_session['access_token'])
+          .format(login_session['access_token'])
     http_obj = httplib2.Http()
     result = http_obj.request(url, 'GET')[0]
     print('result is ')
     print(result)
-    #if result['status'] == '200':
     del login_session['access_token']
     del login_session['gplus_id']
     del login_session['username']
@@ -262,18 +272,34 @@ def gdisconnect():
     del login_session['state']
     flash("Logged out successfully")
     return redirect(url_for('home'))
-    #else:
-    #    response = make_response(json.dumps('Failed to revoke token for given user.'), 400)
-    #    response.headers['Content-Type'] = 'application/json'
-    #    return response
+
 
 @app.route('/catalog.json')
-def get_json():
-    if dao_user.is_logged(login_session) == False:
+def get_json_all_categories_all_items():
+    if dao_user.is_logged(login_session) is False:
         return alert()
-    
+
     categories = dao_category.get_all_categories()
     return jsonify(Category=[category.serialize for category in categories])
+
+
+@app.route('/catalog/<string:category_name>.json')
+def get_json_from_specific_category(category_name):
+    if dao_user.is_logged(login_session) is False:
+        return alert()
+
+    categories = dao_category.get_category_items(category_name)
+    return jsonify(Category=[category.serialize for category in categories])
+
+
+@app.route('/catalog/<string:category_name>/<item_title>.json')
+def get_json_from_specific_item(category_name, item_title):
+    if dao_user.is_logged(login_session) is False:
+        return alert()
+
+    item = dao_item.get_item_by_title(item_title)
+    return jsonify(Item=[item.serialize])
+
 
 def get_authorization(item_title, login_session):
     item = dao_item.get_item_by_title(item_title)
@@ -285,11 +311,17 @@ def get_authorization(item_title, login_session):
     except:
         return False
 
+
 def alert():
-    alert_msg = "<script>function myFunction(){ alert('You are not logged in!'); setTimeout(function() {window.location.href = '/';}, 200);}</script><body onload='myFunction()''>"
+    alert_msg = "<script> \
+        function myFunction(){ \
+        alert('You are not logged in!'); \
+        setTimeout(function() {window.location.href = '/';}, 200);} \
+        </script><body onload='myFunction()''>"
     return alert_msg
 
+
 if __name__ == '__main__':
-	app.secret_key = 'super_secret_key'
-	app.debug = False
-	app.run(host = '0.0.0.0', port = 5000)
+    app.secret_key = 'super_secret_key'
+    app.debug = True
+    app.run(host='0.0.0.0', port=5000)
