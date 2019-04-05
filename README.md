@@ -1,5 +1,6 @@
 # Udacity-fullstack-project2
-Build a catalog web application implementing CRUD and login session with OAuth2.0
+
+Build a catalog web application implementing CRUD, endpoint JSON, login session with OAuth2.0 and using of CRUD only with authorization (user must be logged in to do so).
 
 ## 1 Introduction
 
@@ -22,7 +23,7 @@ The `db_init.py` is just a file to create some first items to populate the datab
 
 **Important:** I am using `Python 3.6.8`. Before proceeding, make sure you have a compatible version.
 
-1. Install the necessary Python modules below (I recommend you to create a virtual environment and install all the modules there. I am using _Pipenv_):
+1. Install the necessary Python modules (I recommend you to create a virtual environment and install all the modules there. I am using _Pipenv_). In order to install then, use the file `requirements.txt` in this repository and run the command line `pip  install  -r  requirements.txt`. It will install for you the following:
  * `Flask 1.0.2`
  * `Flask-SQLAlchemy 2.3.1`
  * `SQLAlchemy 1.3.1`
