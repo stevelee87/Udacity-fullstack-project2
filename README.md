@@ -39,7 +39,7 @@ hint: After a while playing around, you will have added, edited and deleted some
 
 ## 4 Application ***Geek Coffee catalog*** 
 
-* Use the GEEK COFFEE logo at top left corner to go to the main page.
+* Use the **GEEK COFFEE** logo at top left corner to go to the main page.
 * See the latest 10 items added to the catalog on the page center at the main page.
 * Use the left menu to navigate through the existing categories.
 * Once clicked in a category, the items of that category will show on the page center.
@@ -49,4 +49,7 @@ hint: After a while playing around, you will have added, edited and deleted some
 * Once logged in, you can create a new item on the main page clicking on the link _new item_ on the page center above _Latest items_
 * If you go to a catalog category without any item added yet, you can also add new items using the link there.
 * To edit or delete an item, go to its description page. The links to edit or delete the item are at the bottom right on the page center.
-* To get a JSON endpoit access, use the following URL: http://localhost:5000/catalog.json
+* To get a JSON endpoit access, use the following URL. _Please note that for the last 2 URLs the_ `category-name` _and_ `item-title` _must be properly entered_:
+  * For whole catalog: http://localhost:5000/catalog.json
+  * For items from a specific category: http://localhost:5000/catalog/category-name.json
+  * For a specific item from a specific category: http://localhost:5000/catalog/category-name/item-title.json
