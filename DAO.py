@@ -2,7 +2,6 @@ from flask import Flask, flash
 from database_setup import Base, User, Category, Item
 from flask_sqlalchemy import SQLAlchemy
 
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///catalog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -11,6 +10,11 @@ db = SQLAlchemy(app)
 
 
 class DAOItem():
+    """ Data Access Object that makes possible the application to interacts
+    with the ITEM database object creating, reading, updating and deleting
+    items from the database.
+    """
+
     def create(self, title, description, cat_id, user_id):
         new_item = Item(title=title,
                         description=description,
@@ -46,6 +50,9 @@ class DAOItem():
 
 
 class DAOCategory:
+    """ Data Access Object that makes possible the application to interacts
+    with the CATEGORY database object reading categories from the database.
+    """
     def get_category_items(self, category):
         category_items = db.session.query(Item).join(Category)\
                          .filter_by(name=category).all()
@@ -62,6 +69,15 @@ class DAOCategory:
 
 
 class DAOUser:
+    """ Data Access Object that makes possible the application to interacts
+    with the USER database object creating and reading users from the database.
+
+    Atributes:
+        dao_item(:obj:'DAOItem'): Grant access to DAOItem's methods to compare
+        item ownership against user.
+    """
+    dao_item = DAOItem()
+
     def create(self, login_session):
         new_user = User(name=login_session['username'],
                         email=login_session['email'])
@@ -81,6 +97,16 @@ class DAOUser:
     def is_logged(self, login_session):
         if 'email' in login_session:
             if self.get_user_id(login_session['email']) is not None:
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    def is_owner(self, login_session, item_title):
+        item = self.dao_item.get_item_by_title(item_title)
+        if self.is_logged(login_session):
+            if self.get_user_id(login_session['email']) == item.user_id:
                 return True
             else:
                 return False

@@ -20,6 +20,12 @@ CLIENT_ID = json.loads(
 
 @app.route('/')
 def home():
+    """Renders the home page to the user
+
+    Returns:
+        HTML template -- Home Page
+    """
+
     categories = dao_category.get_all_categories()
     latest_items = dao_item.get_latest_items(10)
     return render_template('home.html',
@@ -31,6 +37,15 @@ def home():
 
 @app.route('/catalog/<string:category_name>/items')
 def show_items(category_name):
+    """Renders the page where it is shown the items from a specific category.
+
+    Args:
+        category_name('String'): It is going to be pass to DAOCategory object
+        methods to get all items of a specific category.
+
+    Returns:
+        HTML template -- Item list of a specific category page
+    """
     categories = dao_category.get_all_categories()
     category_items = dao_category.get_category_items(category_name)
     items_quantity = len(category_items)
@@ -45,10 +60,22 @@ def show_items(category_name):
 
 @app.route('/catalog/<string:category_name>/<string:item_title>')
 def show_item_description(category_name, item_title):
+    """Renders the page where it is shown the description of a specific item.
+
+    Args:
+        category_name('String'): It is going to be pass to page renderization,
+        so it can be displaied into the HTML.
+        item_title('String'): It is going to be pass to DAOItem object
+        methods to get item's description.
+
+    Returns:
+        HTML template -- Item description page
+    """
+
     categories = dao_category.get_all_categories()
     item = dao_item.get_item_by_title(item_title)
     description = item.description
-    authorized = get_authorization(item_title, login_session)
+    authorized = dao_user.is_owner(login_session, item_title)
     return render_template('showdescription.html',
                            categories=categories,
                            category_name=category_name,
@@ -61,8 +88,20 @@ def show_item_description(category_name, item_title):
 
 @app.route('/catalog/<string:item_title>/edit', methods=['GET', 'POST'])
 def edit_item(item_title):
+    """Renders the page where the selected item is going to be edit.
+
+    Args:
+        item_title('String'): It is going to be pass to DAOItem object
+        methods to get item's info as well as to verify user ownership.
+
+    Returns:
+        HTML template -- Item edit page
+    """
     if dao_user.is_logged(login_session) is False:
-        return alert()
+        return login_alert()
+
+    if dao_user.is_owner(login_session, item_title) is False:
+        return ownership_alert()
 
     if request.method == 'POST':
         new_title = request.form['new_title']
@@ -88,8 +127,20 @@ def edit_item(item_title):
 
 @app.route('/catalog/<string:item_title>/delete', methods=['GET', 'POST'])
 def delete_item(item_title):
+    """Renders the page where the selected item is going to be deleted.
+
+    Args:
+        item_title('String'): It is going to be pass to DAOItem object
+        methods to get item's info as well as to verify user ownership.
+
+    Returns:
+        HTML template -- Item delete page
+    """
     if dao_user.is_logged(login_session) is False:
-        return alert()
+        return login_alert()
+
+    if dao_user.is_owner(login_session, item_title) is False:
+        return ownership_alert()
 
     item_to_be_deleted = dao_item.get_item_by_title(item_title)
     category = dao_category.get_category_of_item(item_title)
@@ -108,8 +159,13 @@ def delete_item(item_title):
 
 @app.route('/catalog/additem', methods=['GET', 'POST'])
 def add_item():
+    """Renders the page where a new item is going to be added.
+
+    Returns:
+        HTML template -- Item add page
+    """
     if dao_user.is_logged(login_session) is False:
-        return alert()
+        return login_alert()
 
     if request.method == 'POST':
         dao_item.create(request.form['new_title'],
@@ -129,8 +185,19 @@ def add_item():
 
 @app.route('/catalog/<string:category_name>/additem', methods=['GET', 'POST'])
 def add_item_to_specific_category(category_name):
+    """Renders the page where a new item is going to be added to a specific
+    category. It is actually the same page from the add_item() route function,
+    but it starts in a specific category.
+
+    Args:
+        category_name('String'): It is going to be pass the HTML form in order
+        to start the add page with the correct category selected.
+
+    Returns:
+        HTML template -- Item add to a specific category page
+    """
     if dao_user.is_logged(login_session) is False:
-        return alert()
+        return login_alert()
 
     if request.method == 'POST':
         dao_item.create(request.form['new_title'],
@@ -149,6 +216,11 @@ def add_item_to_specific_category(category_name):
 
 @app.route('/login', methods=['GET', 'POST'])
 def auth_login():
+    """Renders the page where the user finds ways to log into the system.
+
+    Returns:
+        HTML template -- Login page
+    """
     state = ''.join(random.choice(string.ascii_uppercase +
                     string.digits) for x in range(32))
     login_session['state'] = state
@@ -160,6 +232,14 @@ def auth_login():
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    """ Start the OAuth2.0 proccess to authenticate user identity within
+    Google account.
+
+    Returns:
+        Resposnse -- If the Auth is suceeded, return a output message and a
+        redirect to the main page. If not, return response saying the error.
+    """
+
     # Validate state token
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
@@ -248,6 +328,12 @@ def gconnect():
 
 @app.route('/gdisconnect')
 def gdisconnect():
+    """ Logs out the user from the OAuth2.0 Google account and cleans the
+    login_session global variable.
+
+    Returns:
+        HTML template -- redirects to the main page.
+    """
     access_token = login_session.get('access_token')
     if access_token is None:
         print('Access Token is None')
@@ -276,8 +362,16 @@ def gdisconnect():
 
 @app.route('/catalog.json')
 def get_json_all_categories_all_items():
+    """ JSON Endpoint: User can get values from a all categories in a JSON
+    format.
+
+    Returns:
+        Response('obj'): Category values for , items, name and id in a JSON
+        format.
+    """
+
     if dao_user.is_logged(login_session) is False:
-        return alert()
+        return login_alert()
 
     categories = dao_category.get_all_categories()
     return jsonify(Category=[category.serialize for category in categories])
@@ -285,8 +379,20 @@ def get_json_all_categories_all_items():
 
 @app.route('/catalog/<string:category_name>.json')
 def get_json_from_specific_category(category_name):
+    """ JSON Endpoint: User can get values from a specific category in a JSON
+    format.
+
+    Arguments:
+        category_name('string'): Name of the category the user wants to be
+        jsonified.
+
+    Returns:
+        Response('obj'): Category values for , description, title and id in
+        a JSON format.
+    """
+
     if dao_user.is_logged(login_session) is False:
-        return alert()
+        return login_alert()
 
     categories = dao_category.get_category_items(category_name)
     return jsonify(Category=[category.serialize for category in categories])
@@ -294,28 +400,56 @@ def get_json_from_specific_category(category_name):
 
 @app.route('/catalog/<string:category_name>/<item_title>.json')
 def get_json_from_specific_item(category_name, item_title):
+    """ JSON Endpoint: User can get values from a specific item from a
+    specific category in a JSON format.
+
+    Arguments:
+        category_name('string'): Name of the item's category
+        item_title('string'): Title of the item the user wants to be jsonified
+
+    Returns:
+        Response('obj'): Item values for cat_id, description, title and id in
+        a JSON format.
+    """
+
     if dao_user.is_logged(login_session) is False:
-        return alert()
+        return login_alert()
 
     item = dao_item.get_item_by_title(item_title)
     return jsonify(Item=[item.serialize])
 
 
-def get_authorization(item_title, login_session):
-    item = dao_item.get_item_by_title(item_title)
-    try:
-        if item.user_id == dao_user.get_user_id(login_session['email']):
-            return True
-        else:
-            return False
-    except:
-        return False
+def login_alert():
+    """ This function is called everytime the user tries to break into a edit
+    or delete or add item link without being logged in. This function creates a
+    JavaScript alert and then redirects the user back to the main page.
 
+    Returns:
+        String -- A Java Script code snippet
+    """
 
-def alert():
     alert_msg = "<script> \
         function myFunction(){ \
         alert('You are not logged in!'); \
+        setTimeout(function() {window.location.href = '/';}, 200);} \
+        </script><body onload='myFunction()''>"
+    return alert_msg
+
+
+def ownership_alert():
+    """ This function is called everytime the user tries to break into a edit
+    or delete item link without being the owner of the item. This function
+    creates a JavaScript alert and then redirects the user back to the main
+    page.
+
+    Returns:
+        String -- A Java Script code snippet
+    """
+
+    alert_msg = "<script> \
+        function myFunction(){ \
+        alert('You are not the owner of this item. Login as the owner \
+        and come back to edit/delete it'); \
         setTimeout(function() {window.location.href = '/';}, 200);} \
         </script><body onload='myFunction()''>"
     return alert_msg
